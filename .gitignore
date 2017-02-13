@@ -19,5 +19,4 @@ dynamo4s.iml
 project/project/
 src/
 .DS_Store
-.idea
-target
+.idea/
