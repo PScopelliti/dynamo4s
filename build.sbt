@@ -4,7 +4,7 @@ name := "dynamo4s"
 
 version := "1.0"
 
-scalaVersion := "2.12.1"
+scalaVersion := "2.11.8"
 
 resolvers ++= Seq(
   "Sonatype Releases" at "https://oss.sonatype.org/content/repositories/releases/", Resolver.jcenterRepo
@@ -12,12 +12,26 @@ resolvers ++= Seq(
 
 libraryDependencies ++= {
 
-  val AwsSdk = "1.11.68"
+  val awsSdk = "1.11.68"
+  val finagle = "6.40.0"
+  val scalaTest = "3.0.1"
+  val mockito = "1.10.19"
 
   Seq(
 
     // Aws SDK
-    "com.amazonaws" % "aws-java-sdk" % AwsSdk
+    "com.amazonaws" % "aws-java-sdk" % awsSdk,
+
+    // Finagle
+    "com.twitter" % "finagle-core_2.11" % finagle,
+    "com.twitter" % "finagle-http_2.11" % finagle,
+
+    // Scalatest
+    "org.scalactic" % "scalactic_2.11" % scalaTest,
+    "org.scalatest" % "scalatest_2.11" % scalaTest,
+
+    // Mockito
+    "org.mockito" % "mockito-all" % mockito % Test
   )
 }
 
