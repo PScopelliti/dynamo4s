@@ -2,7 +2,7 @@ import com.typesafe.sbt.SbtGit.{GitKeys => git}
 
 name := "dynamo4s"
 
-version := "1.0"
+version := "0.1-SNAPSHOT"
 
 scalaVersion := "2.11.8"
 
@@ -97,9 +97,7 @@ lazy val standardSettings = Seq(
 
 lazy val coverageSettings = Seq(
 
-  coverageExcludedPackages := "com.peppescopelliti.twitter4s.processors.*;com.peppescopelliti.dynamo4s.Twitter*Client",
-
-  coverageMinimum := 85
+  coverageMinimum := 70
 )
 
 lazy val root = Project(

@@ -1,8 +1,11 @@
+import TwitterConverters._
 import com.amazonaws.services.dynamodbv2.document.{DynamoDB, Item, Table}
 import org.mockito.Matchers.anyString
 import org.mockito.Mockito.{verify, when}
 import org.scalatest.mockito.MockitoSugar
 import org.scalatest.{FlatSpec, Matchers}
+
+import scala.concurrent.Future
 
 class DynamoClientTest extends FlatSpec with Matchers with MockitoSugar {
 
@@ -12,7 +15,7 @@ class DynamoClientTest extends FlatSpec with Matchers with MockitoSugar {
     val item: Item = mock[Item]
   }
 
-  it should "return a Scala Future with Item when query dynamo" in new Builder {
+  it should "return a Finagle Future with Item when query dynamo" in new Builder {
 
     val tableName = "some_table_name"
     val itemKey = "some_item_key"
@@ -27,6 +30,25 @@ class DynamoClientTest extends FlatSpec with Matchers with MockitoSugar {
     // Verify mocks
     verify(table).getItem("key", itemKey)
     verify(dynamoDB).getTable(tableName)
+  }
+
+  it should "return a Scala Future with Item when query dynamo" in new Builder {
+
+    // TODO find a better way to import implicits
+    val tableName = "some_table_name"
+    val itemKey = "some_item_key"
+
+    // Set up mocks
+    when(dynamoDB.getTable(anyString())).thenReturn(table)
+    when(table.getItem(anyString(), anyString())).thenReturn(item)
+
+    // Run fixture
+    val sut: Future[Item] = DynamoClient(dynamoDB).query(tableName, itemKey)
+
+    // Verify mocks
+    verify(table).getItem("key", itemKey)
+    verify(dynamoDB).getTable(tableName)
+
   }
 
 }

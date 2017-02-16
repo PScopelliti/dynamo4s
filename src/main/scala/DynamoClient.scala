@@ -23,5 +23,4 @@ class DynamoClient private(val dynamoDB: DynamoDB) {
 object DynamoClient {
 
   def apply(dynamoDB: DynamoDB) = new DynamoClient(dynamoDB)
-
 }
