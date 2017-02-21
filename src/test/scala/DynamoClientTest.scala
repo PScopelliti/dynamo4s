@@ -18,17 +18,18 @@ class DynamoClientTest extends FlatSpec with Matchers with MockitoSugar {
   it should "return a Finagle Future with Item when query dynamo" in new Builder {
 
     val tableName = "some_table_name"
-    val itemKey = "some_item_key"
+    val hashKeyName = "some_hash_key_name"
+    val hashKeyValue = "some_hash_key_value"
 
     // Set up mocks
     when(dynamoDB.getTable(anyString())).thenReturn(table)
     when(table.getItem(anyString(), anyString())).thenReturn(item)
 
     // Run fixture
-    val sut = DynamoClient(dynamoDB).query(tableName, itemKey)
+    val sut = DynamoClient(dynamoDB).getItem(tableName)(hashKeyName)(hashKeyValue)
 
     // Verify mocks
-    verify(table).getItem("key", itemKey)
+    verify(table).getItem(hashKeyName, hashKeyValue)
     verify(dynamoDB).getTable(tableName)
   }
 
@@ -36,19 +37,19 @@ class DynamoClientTest extends FlatSpec with Matchers with MockitoSugar {
 
     // TODO find a better way to import implicits
     val tableName = "some_table_name"
-    val itemKey = "some_item_key"
+    val hashKeyName = "some_hash_key_name"
+    val hashKeyValue = "some_hash_key_value"
 
     // Set up mocks
     when(dynamoDB.getTable(anyString())).thenReturn(table)
     when(table.getItem(anyString(), anyString())).thenReturn(item)
 
     // Run fixture
-    val sut: Future[Item] = DynamoClient(dynamoDB).query(tableName, itemKey)
+    val sut: Future[Item] = DynamoClient(dynamoDB).getItem(tableName)(hashKeyName)(hashKeyValue)
 
     // Verify mocks
-    verify(table).getItem("key", itemKey)
+    verify(table).getItem(hashKeyName, hashKeyValue)
     verify(dynamoDB).getTable(tableName)
-
   }
 
 }
