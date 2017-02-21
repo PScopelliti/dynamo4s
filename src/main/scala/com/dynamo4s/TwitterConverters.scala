@@ -1,3 +1,5 @@
+package com.dynamo4s
+
 
 import com.twitter.{util => twitter}
 

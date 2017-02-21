@@ -1,3 +1,5 @@
+package com.dynamo4s
+
 import java.util.concurrent.Executors
 
 import com.amazonaws.services.dynamodbv2.document._

@@ -1,5 +1,5 @@
-import TwitterConverters._
 import com.amazonaws.services.dynamodbv2.document.{DynamoDB, Item, Table}
+import com.dynamo4s.DynamoClient
 import org.mockito.Matchers.anyString
 import org.mockito.Mockito.{verify, when}
 import org.scalatest.mockito.MockitoSugar
