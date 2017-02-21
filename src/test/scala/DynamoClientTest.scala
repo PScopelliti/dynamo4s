@@ -35,6 +35,8 @@ class DynamoClientTest extends FlatSpec with Matchers with MockitoSugar {
 
   it should "return a Scala Future with Item when query dynamo" in new Builder {
 
+    import DynamoClient.twitterToScalaFuture
+
     // TODO find a better way to import implicits
     val tableName = "some_table_name"
     val hashKeyName = "some_hash_key_name"
@@ -51,5 +53,6 @@ class DynamoClientTest extends FlatSpec with Matchers with MockitoSugar {
     verify(table).getItem(hashKeyName, hashKeyValue)
     verify(dynamoDB).getTable(tableName)
   }
+
 
 }

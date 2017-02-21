@@ -4,6 +4,10 @@ import java.util.concurrent.Executors
 
 import com.amazonaws.services.dynamodbv2.document._
 import com.twitter.util.{Future, FuturePool}
+import com.twitter.{util => twitter}
+
+import scala.concurrent.{ExecutionContext, Promise}
+import scala.util.{Failure, Success, Try}
 
 class DynamoClient private(val dynamoDB: DynamoDB) {
 
@@ -56,6 +60,29 @@ class DynamoClient private(val dynamoDB: DynamoDB) {
 
 object DynamoClient {
 
-  def apply(dynamoDB: DynamoDB) = new DynamoClient(dynamoDB)
+  import scala.language.implicitConversions
 
+  implicit def scalaToTwitterTry[T](t: Try[T]): twitter.Try[T] = t match {
+    case Success(r) => twitter.Return(r)
+    case Failure(ex) => twitter.Throw(ex)
+  }
+
+  implicit def twitterToScalaTry[T](t: twitter.Try[T]): Try[T] = t match {
+    case twitter.Return(r) => Success(r)
+    case twitter.Throw(ex) => Failure(ex)
+  }
+
+  implicit def twitterToScalaFuture[T](f: Future[T]): scala.concurrent.Future[T] = {
+    val promise = Promise[T]()
+    f.respond(promise complete _)
+    promise.future
+  }
+
+  implicit def scalaToTwitterFuture[T](f: scala.concurrent.Future[T])(implicit ec: ExecutionContext): Future[T] = {
+    val promise = twitter.Promise[T]()
+    f.onComplete(promise update _)
+    promise
+  }
+
+  def apply(dynamoDB: DynamoDB) = new DynamoClient(dynamoDB)
 }
